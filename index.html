@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Приглашение на юбилей — Зоя 80 лет</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600;1,700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-color: #fdf6f8;
+      --card-bg: #ffffff;
+      --gold-primary: #c5a059;
+      --gold-dark: #8c6d33;
+      --gold-light: #e8c872;
+      --gold-gradient: linear-gradient(135deg, #c5a059 0%, #fef3c7 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+      --pink-soft: #fde8ed;
+      --pink-accent: #f8c8d4;
+      --pink-dark: #8a2b52;
+      --pink-badge: #fff0f3;
+      --text-dark: #4a3b32;
+      --text-muted: #8c7365;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      font-family: 'Montserrat', sans-serif;
+      color: var(--text-dark);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Cover Screen Overlay */
+    #coverScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: var(--bg-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 10px;
+      transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease;
+    }
+
+    .cover-card {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      height: 90vh;
+      max-height: 750px;
+      background: url('cover.jpg') center/cover no-repeat;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 40px 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      border: 1px solid var(--pink-accent);
+      text-align: center;
+    }
+
+    /* Мәтіндерді ортаға дәл түсіру */
+    .cover-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: auto 0;
+      gap: 10px;
+    }
+
+    .cover-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px;
+      color: var(--pink-dark);
+      font-weight: 700;
+      font-style: italic;
+    }
+
+    .cover-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 50px;
+      color: var(--gold-dark);
+      font-weight: 700;
+      line-height: 1;
+      margin-top: 4px;
+    }
+
+    .cover-years {
+      font-size: 14px;
+      letter-spacing: 4px;
+      color: var(--pink-dark);
+      font-weight: 600;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 6px 22px;
+      border-radius: 20px;
+      border: 1px solid var(--pink-accent);
+      margin-top: 10px;
+    }
+
+    .btn-open {
+      background: var(--gold-gradient);
+      color: #5a1a24;
+      border: none;
+      padding: 15px 32px;
+      border-radius: 30px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(197, 160, 89, 0.4);
+      transition: transform 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .btn-open:hover {
+      transform: scale(1.05);
+    }
+
+    /* Floating Music Button */
+    .music-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 1px solid var(--pink-accent);
+      color: var(--pink-dark);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      font-size: 18px;
+      transition: all 0.3s ease;
+    }
+
+    .music-btn.playing {
+      animation: spin 4s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Main Container */
+    .main-container {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 20px 12px;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 24px;
+      padding: 32px 24px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(248, 200, 212, 0.25);
+      position: relative;
+      border: 1px solid rgba(248, 200, 212, 0.6);
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gold-gradient);
+    }
+
+    .gold-ornament {
+      color: var(--gold-primary);
+      font-size: 14px;
+      margin-bottom: 12px;
+      letter-spacing: 4px;
+    }
+
+    .title-script {
+      font-size: 34px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #8a2b52 0%, #b8860b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
+
+    .description-text {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-dark);
+      margin: 12px 0;
+    }
+
+    /* Calendar */
+    .calendar-header {
+      font-size: 14px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-top: 15px;
+      font-size: 13px;
+    }
+
+    .day-name {
+      color: var(--pink-dark);
+      font-weight: 700;
+      padding-bottom: 6px;
+      font-size: 11px;
+    }
+
+    .day-number {
+      padding: 8px 0;
+      color: var(--text-dark);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .day-number.active {
+      background: var(--gold-gradient);
+      color: #5a1a24;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(197, 160, 89, 0.4);
+    }
+
+    /* Buttons */
+    .btn-gis {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 12px 28px;
+      background: var(--pink-soft);
+      border: 1px solid var(--gold-primary);
+      color: var(--pink-dark);
+      text-decoration: none;
+      border-radius: 25px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(248, 200, 212, 0.4);
+    }
+
+    .btn-gis:hover {
+      background: var(--gold-gradient);
+      color: #5a1a24;
+      border-color: transparent;
+    }
+
+    /* Countdown Timer */
+    .timer-card {
+      background-color: #fffcfd;
+      border: 1px solid var(--pink-accent);
+      border-radius: 24px;
+      padding: 25px 15px;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(248, 200, 212, 0.3);
+    }
+
+    .timer-title {
+      color: var(--pink-dark);
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .timer-flex {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .timer-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #ffffff;
+      padding: 10px 12px;
+      border-radius: 16px;
+      border: 1px solid var(--pink-accent);
+      min-width: 68px;
+    }
+
+    .timer-num {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--gold-dark);
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    .timer-label {
+      font-size: 9px;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      font-weight: 600;
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 18px;
+      text-align: left;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--pink-dark);
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 18px;
+      border: 1px solid var(--pink-accent);
+      background-color: #fffcfd;
+      border-radius: 20px;
+      font-size: 14px;
+      outline: none;
+      font-family: inherit;
+      color: var(--text-dark);
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text-dark);
+      background: var(--pink-badge);
+      padding: 10px 14px;
+      border-radius: 15px;
+      border: 1px solid rgba(248, 200, 212, 0.5);
+    }
+
+    .radio-option input {
+      accent-color: var(--pink-dark);
+      width: 16px;
+      height: 16px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #c5a059 0%, #8a2b52 100%);
+      color: #ffffff;
+      border: none;
+      padding: 15px;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 6px 18px rgba(138, 43, 82, 0.25);
+    }
+
+    footer {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cover Screen (Басты бет) -->
+  <div id="coverScreen">
+    <div class="cover-card">
+      <div></div>
+
+      <div class="cover-content">
+        <div class="gold-ornament">✦ ✦ ✦</div>
+        <div class="cover-title">Приглашение на юбилей</div>
+        <div class="cover-subtitle">Зоя</div>
+        <div class="cover-years">80 лет</div>
+      </div>
+      
+      <div>
+        <button class="btn-open" id="openBtn">
+          <span>Открыть приглашение</span> ✉
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Music Toggle Control -->
+  <button class="music-btn" id="musicToggle" title="Музыка">🎵</button>
+
+  <!-- Background Music Audio (music2.mp3 жүктеледі) -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="music2.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Main Invitation Content -->
+  <div class="main-container">
+    
+    <!-- Greeting Card -->
+    <div class="card">
+      <div class="gold-ornament">✦ ✦ ✦</div>
+      <div class="title-script">Приглашение</div>
+      <p class="description-text" style="font-size: 16px; font-style: italic; color: var(--pink-dark); font-weight: 700;">
+        Дорогие гости!
+      </p>
+      
+      <p class="description-text">
+С огромной радостью приглашаем вас разделить с нами особенный и прекрасный день — празднование 80-летнего юбилея<strong>!</strong>
+      </p>
+
+      <p class="description-text">
+        Будем счастливы видеть вас среди наших гостей, разделить с вами радость этого события и наполнить этот день тёплыми улыбками, добрыми словами и незабываемыми моментами.
+      </p>
+    </div>
+
+    <!-- Date & Calendar Card -->
+    <div class="card">
+      <div class="gold-ornament">✦ ✦ ✦</div>
+      <div class="title-script" style="font-size: 28px;">Дата юбилея</div>
+      <div class="calendar-header">15 НОЯБРЯ 2026 ГОДА</div>
+
+      <div class="calendar-grid">
+        <div class="day-name">ПН</div>
+        <div class="day-name">ВТ</div>
+        <div class="day-name">СР</div>
+        <div class="day-name">ЧТ</div>
+        <div class="day-name">ПТ</div>
+        <div class="day-name">СБ</div>
+        <div class="day-name">ВС</div>
+
+        <!-- November 2026 -->
+        <div class="day-number" style="grid-column-start: 7;">1</div>
+        <div class="day-number">2</div>
+        <div class="day-number">3</div>
+        <div class="day-number">4</div>
+        <div class="day-number">5</div>
+        <div class="day-number">6</div>
+        <div class="day-number">7</div>
+        <div class="day-number">8</div>
+        <div class="day-number">9</div>
+        <div class="day-number">10</div>
+        <div class="day-number">11</div>
+        <div class="day-number">12</div>
+        <div class="day-number">13</div>
+        <div class="day-number">14</div>
+        <div class="day-number active">15</div>
+        <div class="day-number">16</div>
+        <div class="day-number">17</div>
+        <div class="day-number">18</div>
+        <div class="day-number">19</div>
+        <div class="day-number">20</div>
+        <div class="day-number">21</div>
+        <div class="day-number">22</div>
+        <div class="day-number">23</div>
+        <div class="day-number">24</div>
+        <div class="day-number">25</div>
+        <div class="day-number">26</div>
+        <div class="day-number">27</div>
+        <div class="day-number">28</div>
+        <div class="day-number">29</div>
+        <div class="day-number">30</div>
+      </div>
+    </div>
+
+    <!-- Location Card -->
+    <div class="card">
+      <div class="gold-ornament">✦ ✦ ✦</div>
+      <div class="title-script" style="font-size: 28px;">Место проведения</div>
+      <p class="description-text">
+        г. Уральск<br>
+        ул. Сырым Датова, 55<br>
+        <strong style="color: var(--pink-dark); font-size: 18px; font-family: 'Cormorant Garamond', serif;">Ресторан «Каспий»</strong>
+      </p>
+      <a href="https://go.2gis.com/uSbbJ" target="_blank" class="btn-gis">📍 Открыть в 2GIS</a>
+    </div>
+
+    <!-- Time Block Card -->
+    <div class="card" style="padding: 20px; background: linear-gradient(135deg, #fffcfd 0%, #fde8ed 100%);">
+      <div class="title-script" style="font-size: 32px; margin: 0;">13:00</div>
+      <div style="font-size: 11px; letter-spacing: 2px; color: var(--pink-dark); text-transform: uppercase; font-weight: 700;">НАЧАЛО ТОРЖЕСТВА</div>
+    </div>
+
+    <!-- Timer Card -->
+    <div class="timer-card">
+      <div class="timer-title">ДО ЮБИЛЕЯ ОСТАЛОСЬ</div>
+      <div class="timer-flex">
+        <div class="timer-item">
+          <span class="timer-num" id="days">00</span>
+          <span class="timer-label">ДНЕЙ</span>
+        </div>
+        <div class="timer-item">
+          <span class="timer-num" id="hours">00</span>
+          <span class="timer-label">ЧАСОВ</span>
+        </div>
+        <div class="timer-item">
+          <span class="timer-num" id="minutes">00</span>
+          <span class="timer-label">МИНУТ</span>
+        </div>
+        <div class="timer-item">
+          <span class="timer-num" id="seconds">00</span>
+          <span class="timer-label">СЕКУНД</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Host & RSVP Questionnaire Card -->
+    <div class="card">
+      <div class="gold-ornament">✦ ✦ ✦</div>
+      <div class="title-script" style="font-size: 28px;">Хозяева праздника</div>
+      <p class="description-text" style="font-weight: 600; color: var(--pink-dark); font-size: 16px;">
+        Дети юбиляра
+      </p>
+      <p class="description-text" style="font-style: italic; color: var(--text-muted);">
+        Ждем вас на нашем празднике!
+      </p>
+
+      <div style="border-top: 1px dashed var(--pink-accent); margin: 25px 0;"></div>
+
+      <div class="title-script" style="font-size: 28px;">Анкета гостя</div>
+      <p class="description-text" style="font-size: 13px; margin-bottom: 20px;">
+        Пожалуйста, подтвердите ваше присутствие:
+      </p>
+
+      <form id="rsvpForm">
+        <div class="form-group">
+          <label class="form-label" for="phoneInput">Номер WhatsApp хозяина:</label>
+          <input type="tel" id="phoneInput" class="form-input" placeholder="77782832043" value="77782832043" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="guestName">Ваше имя и фамилия:</label>
+          <input type="text" id="guestName" class="form-input" placeholder="Введите ваше имя" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Придете ли вы на юбилей?</label>
+          <label class="radio-option">
+            <input type="radio" name="attendance" value="Да, обязательно приду" checked>
+            <span>Да, обязательно приду</span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="attendance" value="К сожалению, не смогу прийти">
+            <span>К сожалению, не смогу прийти</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn-submit">
+          <span>Отправить ответ в WhatsApp</span> ✉
+        </button>
+      </form>
+    </div>
+
+    <footer>
+      © 2026 Юбилей Зои — 80 лет
+    </footer>
+
+  </div>
+
+  <script>
+    const openBtn = document.getElementById('openBtn');
+    const coverScreen = document.getElementById('coverScreen');
+    const bgMusic = document.getElementById('bgMusic');
+    const musicToggle = document.getElementById('musicToggle');
+
+    let isPlaying = false;
+
+    function playAudio() {
+      bgMusic.play().then(() => {
+        isPlaying = true;
+        musicToggle.classList.add('playing');
+        musicToggle.innerText = '🎵';
+      }).catch(e => {
+        console.log("Audio autoplay prevented:", e);
+      });
+    }
+
+    function toggleAudio() {
+      if (isPlaying) {
+        bgMusic.pause();
+        isPlaying = false;
+        musicToggle.classList.remove('playing');
+        musicToggle.innerText = '🔇';
+      } else {
+        playAudio();
+      }
+    }
+
+    openBtn.addEventListener('click', () => {
+      coverScreen.style.transform = 'translateY(-100%)';
+      coverScreen.style.opacity = '0';
+      setTimeout(() => {
+        coverScreen.style.display = 'none';
+      }, 800);
+
+      playAudio();
+    });
+
+    musicToggle.addEventListener('click', toggleAudio);
+
+    // Countdown Timer (15 Ноября 2026, 13:00)
+    const targetDate = new Date('2026-11-15T13:00:00').getTime();
+
+    function updateTimer() {
+      const now = new Date().getTime();
+      const difference = targetDate - now;
+
+      if (difference > 0) {
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+        document.getElementById('days').innerText = String(days).padStart(2, '0');
+        document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+        document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+        document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+      } else {
+        document.getElementById('days').innerText = '00';
+        document.getElementById('hours').innerText = '00';
+        document.getElementById('minutes').innerText = '00';
+        document.getElementById('seconds').innerText = '00';
+      }
+    }
+
+    setInterval(updateTimer, 1000);
+    updateTimer();
+
+    // WhatsApp Form Handler
+    document.getElementById('rsvpForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      let rawPhone = document.getElementById('phoneInput').value.replace(/\D/g, '');
+      const name = document.getElementById('guestName').value.trim();
+      const attendance = document.querySelector('input[name="attendance"]:checked').value;
+
+      if (!name || !rawPhone) return;
+
+      const message = `Здравствуйте! Ответ на приглашение (Юбилей Зои - 80 лет):\n\n👤 *Имя:* ${name}\n📌 *Ответ:* ${attendance}`;
+      const encodedMessage = encodeURIComponent(message);
+
+      const whatsappUrl = `https://wa.me/${rawPhone}?text=${encodedMessage}`;
+      window.open(whatsappUrl, '_blank');
+    });
+  </script>
+</body>
+</html>
